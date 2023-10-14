@@ -20,7 +20,7 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
 public class Main {
     public static void main(String[] args) throws WriterException, IOException {
-        System.out.println("Saqra v1.0.0 (qr code generator)");
+        System.out.print("Saqra v1.0.0 (qr code generator)\n\n");
 
         while (true) {
             var file = createFile();
@@ -28,6 +28,7 @@ public class Main {
             var image = generate(text, 256);
 
             write(image, "PNG", file);
+            System.out.print("[exec]: done.\n\n");
         }
     }
 
