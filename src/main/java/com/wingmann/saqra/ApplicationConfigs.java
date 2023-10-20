@@ -2,13 +2,15 @@ package com.wingmann.saqra;
 
 import java.io.*;
 import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 public class ApplicationConfigs {
-    private static final String CONFIG_PATH = "./path.config";
+    private static final String CONFIG_PATH = "./config.txt";
 
     public static File createFile() {
         return new File(generateFilename());
@@ -25,7 +27,7 @@ public class ApplicationConfigs {
         try (var writer = new FileWriter(CONFIG_PATH)) {
             writer.write(path);
         } catch (IOException e) {
-            System.err.println("[error]: io error");
+            System.err.printf("[error]: %s%n", e.getMessage());
         }
     }
 
@@ -38,37 +40,60 @@ public class ApplicationConfigs {
             reader.close();
             return path;
         } catch (IOException e) {
-            System.err.println("[error]: io error");
+            System.err.printf("[error]: %s%n", e.getMessage());
             return "";
         }
     }
 
-    public static boolean setup() {
-        String input;
-
+    public static void setup() {
         if (Files.notExists(Path.of(CONFIG_PATH))) {
-            System.out.println("[exec]: configuration");
-
-            var scanner = new Scanner(System.in);
-
-            while (true) {
-                System.out.print("[path]: ");
-                input = scanner.nextLine();
-
-                if (input.isBlank()) {
-                    System.err.print("[error]: input is blank\n\n");
-                    continue;
-                }
-                break;
-            }
-
-            setConfig(input);
+            setupNew();
         }
         var path = loadConfig();
 
-        if (Files.notExists(Path.of(path))) {
-            return new File(path).mkdirs();
+        if (!isValidPath(path)) {
+            System.out.print("[error]: path is not correct\n\n");
+            throw new RuntimeException();
         }
-        return false;
+
+        if (Files.notExists(Path.of(path))) {
+            if (createDirectories(path)) {
+                System.out.print("[exec]: directories was created\n\n");
+            }
+        }
+    }
+
+    private static void setupNew() {
+        System.out.println("[exec]: configuration");
+
+        var scanner = new Scanner(System.in);
+        String input;
+
+        while (true) {
+            System.out.print("[path]: ");
+            input = scanner.nextLine();
+
+            if (input.isBlank()) {
+                System.err.print("[error]: input is blank\n\n");
+                continue;
+            }
+            break;
+        }
+
+        setConfig(input);
+        System.out.print("[exec]: done.\n\n");
+    }
+
+    public static boolean isValidPath(String path) {
+        try {
+            Paths.get(path);
+        } catch (InvalidPathException | NullPointerException e) {
+            return false;
+        }
+        return true;
+    }
+
+    private static boolean createDirectories(String path) {
+        return new File(path).mkdirs();
     }
 }
