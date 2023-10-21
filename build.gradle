@@ -1,46 +1,50 @@
 plugins {
     id 'java'
-
-    // Apply the application plugin to add support for building a CLI application in Java.
+    id 'idea'
     id 'application'
+
+    id 'com.github.johnrengelman.shadow' version '7.0.0'
 }
 
 group = 'com.wingmann'
-version = '1.0.0'
 
-repositories {
-    // Use Maven Central for resolving dependencies.
-    mavenCentral()
-}
-
-dependencies {
-    // This dependency is used by the application.
-    implementation 'com.google.guava:guava:32.1.1-jre'
-
-    implementation 'com.google.zxing:core:3.5.2'
-}
-
-// Apply a specific Java toolchain to ease working on different environments.
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(17)
     }
 }
 
+idea {
+    project {
+        languageLevel = java.toolchain.languageVersion.get()
+    }
+    module {
+        downloadJavadoc = true
+        downloadSources = true
+    }
+}
+
 application {
-    // Define the main class for the application.
     mainClass = 'com.wingmann.saqra.Main'
 }
 
-tasks.jar {
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'com.google.guava:guava:32.1.1-jre'
+    implementation 'com.google.zxing:core:3.5.2'
+}
+
+shadowJar {
+    archiveBaseName.set('saqra')
+    archiveVersion.set('1.0.0')
+    archiveClassifier.set('')
+
     manifest {
         attributes 'Main-Class': application.mainClass
     }
-
-    def dependencies = configurations
-            .runtimeClasspath
-            .collect { zipTree(it) }
-
-    from(dependencies)
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
+
+tasks.build.dependsOn tasks.shadowJar
