@@ -10,14 +10,13 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.util.Hashtable;
+import java.util.Optional;
 import java.util.Scanner;
 
 public class Generator {
-    private static final int WIDTH = 256;
-    private static final int HEIGHT = 256;
-
     public static boolean start() {
         var file = ApplicationConfigs.createFile();
         var text = readLine();
@@ -27,16 +26,8 @@ public class Generator {
             return false;
         }
 
-        try {
-            var image = generate(text);
-            try {
-                write(image, file);
-            } catch (IOException e) {
-                System.err.println("[error]: io exception");
-            }
-        } catch (WriterException e) {
-            System.err.println("[error]: writer exception");
-        }
+        var image = generate(text);
+        image.ifPresent(bufferedImage -> write(bufferedImage, file));
 
         System.out.print("[exec]: done.\n\n");
         return true;
@@ -58,21 +49,40 @@ public class Generator {
         }
     }
 
-    private static BufferedImage generate(String text) throws WriterException {
+    private static Optional<BufferedImage> generate(String text) {
+        var hintMap = createHintMap();
+        var matrix = generateMatrix(text, hintMap);
+
+        if (matrix.isPresent()) {
+            var image = Optional.of(new BufferedImage(
+                    matrix.get().getWidth(),
+                    matrix.get().getHeight(),
+                    BufferedImage.TYPE_INT_RGB));
+
+            createGraphics(image.get(), matrix.get());
+
+            return image;
+        }
+        return Optional.empty();
+    }
+
+    private static Hashtable<EncodeHintType, ErrorCorrectionLevel> createHintMap() {
         var hintMap = new Hashtable<EncodeHintType, ErrorCorrectionLevel>();
         hintMap.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
 
-        var matrix = new QRCodeWriter()
-                .encode(text, BarcodeFormat.QR_CODE, WIDTH, HEIGHT, hintMap);
+        return hintMap;
+    }
 
-        var image = new BufferedImage(
-                matrix.getWidth(),
-                matrix.getHeight(),
-                BufferedImage.TYPE_INT_RGB);
-
-        createGraphics(image, matrix);
-
-        return image;
+    private static Optional<BitMatrix> generateMatrix(
+            String text,
+            Hashtable<EncodeHintType, ErrorCorrectionLevel> hintMap) {
+        try {
+            return Optional.of(new QRCodeWriter()
+                    .encode(text, BarcodeFormat.QR_CODE, 256, 256, hintMap));
+        } catch (WriterException e) {
+            System.err.printf("[error]: %s%n", e.getMessage());
+            return Optional.empty();
+        }
     }
 
     private static void createGraphics(BufferedImage image, BitMatrix matrix) {
@@ -94,7 +104,17 @@ public class Generator {
         }
     }
 
-    private static void write(BufferedImage image, java.io.File file) throws IOException {
-        ImageIO.write(image, "png", file);
+    private static void write(BufferedImage image, File file) {
+        var path = ApplicationConfigs.loadConfig();
+
+        if (ApplicationConfigs.filesNotExists(path)) {
+            ApplicationConfigs.createDirectories(path);
+        }
+
+        try {
+            ImageIO.write(image, "png", file);
+        } catch (IOException e) {
+            System.err.printf("[error]: %s%n", e.getMessage());
+        }
     }
 }
