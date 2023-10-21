@@ -1,26 +1,12 @@
 plugins {
     id 'java'
-    id 'idea'
     id 'application'
-
     id 'com.github.johnrengelman.shadow' version '7.0.0'
 }
-
-group = 'com.wingmann'
 
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(17)
-    }
-}
-
-idea {
-    project {
-        languageLevel = java.toolchain.languageVersion.get()
-    }
-    module {
-        downloadJavadoc = true
-        downloadSources = true
     }
 }
 
