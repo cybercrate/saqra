@@ -18,7 +18,8 @@ import java.util.Scanner;
 
 public class Generator {
     public static boolean start() {
-        var file = ApplicationConfigs.createFile();
+        var path = ApplicationConfigs.loadConfig();
+        var file = Directory.createFile(path);
         var text = readLine();
 
         if (text.equalsIgnoreCase("/exit")) {
@@ -107,8 +108,8 @@ public class Generator {
     private static void write(BufferedImage image, File file) {
         var path = ApplicationConfigs.loadConfig();
 
-        if (ApplicationConfigs.filesNotExists(path)) {
-            ApplicationConfigs.createDirectories(path);
+        if (Directory.filesNotExists(path)) {
+            Directory.createDirectories(path);
         }
 
         try {

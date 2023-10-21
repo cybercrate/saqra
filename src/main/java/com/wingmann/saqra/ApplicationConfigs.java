@@ -1,26 +1,9 @@
 package com.wingmann.saqra;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.InvalidPathException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 public class ApplicationConfigs {
-    public static File createFile() {
-        return new File(generateFilename());
-    }
-
-    private static String generateFilename() {
-        var path = loadConfig();
-        var formatter = DateTimeFormatter.ofPattern("ddMMyyyy-HHmmss");
-
-        return String.format("%s/qr-%s.png", path, LocalDateTime.now().format(formatter));
-    }
-
     private static String getConfigPath() {
         return "./config.txt";
     }
@@ -48,18 +31,18 @@ public class ApplicationConfigs {
     }
 
     public static void setup() {
-        if (filesNotExists(getConfigPath())) {
+        if (Directory.filesNotExists(getConfigPath())) {
             configure();
         }
         var path = loadConfig();
 
-        if (isInvalidPath(path)) {
+        if (Directory.isInvalidPath(path)) {
             System.out.print("[error]: path is not correct\n\n");
             throw new RuntimeException();
         }
 
-        if (filesNotExists(path)) {
-            if (createDirectories(path)) {
+        if (Directory.filesNotExists(path)) {
+            if (Directory.createDirectories(path)) {
                 System.out.print("[exec]: directories was created\n\n");
             }
         }
@@ -75,7 +58,7 @@ public class ApplicationConfigs {
             System.out.print("[path]: ");
             input = scanner.nextLine();
 
-            if (input.isBlank() || isInvalidPath(input)) {
+            if (input.isBlank() || Directory.isInvalidPath(input)) {
                 System.err.print("[error]: path is invalid\n\n");
                 continue;
             }
@@ -84,22 +67,5 @@ public class ApplicationConfigs {
 
         setConfig(input);
         System.out.print("[exec]: done.\n\n");
-    }
-
-    public static boolean isInvalidPath(String path) {
-        try {
-            Paths.get(path);
-        } catch (InvalidPathException | NullPointerException e) {
-            return true;
-        }
-        return false;
-    }
-
-    public static boolean filesNotExists(String path) {
-        return Files.notExists(Path.of(path));
-    }
-
-    public static boolean createDirectories(String path) {
-        return new File(path).mkdirs();
     }
 }
