@@ -32,6 +32,8 @@ public class QrGenerator implements Generator {
         this.config = config;
         logger = new ConsoleLogger();
         filesManager = new OutputFilesManager();
+
+        config.setup();
     }
 
     @Override
