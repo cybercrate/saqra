@@ -30,8 +30,8 @@ public class QrGenerator implements Generator {
 
     public QrGenerator(Config config) {
         this.config = config;
-        logger = new ConsoleLogger();
-        filesManager = new OutputFilesManager();
+        this.logger = new ConsoleLogger();
+        this.filesManager = new OutputFilesManager();
 
         config.setup();
     }

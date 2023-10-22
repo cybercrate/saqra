@@ -15,8 +15,8 @@ public class ApplicationConfig implements Config {
 
     public ApplicationConfig(String configPath) {
         this.configPath = configPath;
-        logger = new ConsoleLogger();
-        filesManager = new OutputFilesManager();
+        this.logger = new ConsoleLogger();
+        this.filesManager = new OutputFilesManager();
     }
 
     @Override
