@@ -1,4 +1,4 @@
-package com.wingmann.saqra;
+package com.wingmann.saqra.files;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -8,19 +8,21 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class Directory {
-    public static File createFile(String path) {
+public class OutputFilesManager implements FilesManager {
+    @Override
+    public File createFile(String path) {
         return new File(generateFilename(path));
     }
 
-    private static String generateFilename(String path) {
-        var formatter = DateTimeFormatter.ofPattern("ddMMyyyy-HHmmss");
-        var meta = LocalDateTime.now().format(formatter);
+    private String generateFilename(String path) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ddMMyyyy-HHmmss");
+        String meta = LocalDateTime.now().format(formatter);
 
         return String.format("%s/qr-%s.png", path, meta);
     }
 
-    public static boolean isInvalidPath(String path) {
+    @Override
+    public boolean isInvalidPath(String path) {
         try {
             Paths.get(path);
         } catch (InvalidPathException | NullPointerException e) {
@@ -29,11 +31,13 @@ public class Directory {
         return false;
     }
 
-    public static boolean filesNotExists(String path) {
+    @Override
+    public boolean filesNotExists(String path) {
         return Files.notExists(Path.of(path));
     }
 
-    public static boolean createDirectories(String path) {
+    @Override
+    public boolean createDirectories(String path) {
         return new File(path).mkdirs();
     }
 }

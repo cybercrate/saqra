@@ -1,6 +1,6 @@
-package com.wingmann.saqra;
+package com.wingmann.saqra.log;
 
-public class Logger {
+public class ConsoleLogger implements Logger {
     private enum PrintType {
         LOG,
         ERROR;
@@ -13,31 +13,36 @@ public class Logger {
         }
     }
 
-    private static void message(PrintType type, String message, boolean line) {
+    private void message(PrintType type, String message, boolean line) {
         System.out.printf("[%s]: %s%s", type.get(), message, line ? "\n\n" : "\n");
     }
 
-    private static void inputMessage(String message) {
+    private void inputMessage(String message) {
         System.out.printf("[%s]: ", message);
     }
 
-    public static void log(String message) {
+    @Override
+    public void log(String message) {
         message(PrintType.LOG, message, false);
     }
 
-    public static void logln(String message) {
+    @Override
+    public void logln(String message) {
         message(PrintType.LOG, message, true);
     }
 
-    public static void error(String message) {
+    @Override
+    public void error(String message) {
         message(PrintType.ERROR, message, false);
     }
 
-    public static void errorln(String message) {
+    @Override
+    public void errorln(String message) {
         message(PrintType.ERROR, message, true);
     }
 
-    public static void input(String message) {
+    @Override
+    public void input(String message) {
         inputMessage(message);
     }
 }
