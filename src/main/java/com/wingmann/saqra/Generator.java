@@ -23,14 +23,14 @@ public class Generator {
         var text = readLine();
 
         if (text.equalsIgnoreCase("/exit")) {
-            Logger.log("exit", false);
+            Logger.log("exit");
             return false;
         }
 
         var image = generate(text);
         image.ifPresent(bufferedImage -> write(bufferedImage, file));
 
-        Logger.log("done.", true);
+        Logger.logln("done.");
         return true;
     }
 
@@ -39,11 +39,11 @@ public class Generator {
         String input;
 
         while (true) {
-            Logger.input();
+            Logger.input("text");
             input = scanner.nextLine();
 
             if (input.isBlank()) {
-                Logger.error("input is blank", true);
+                Logger.errorln("input is blank");
                 continue;
             }
             return input;
@@ -81,7 +81,7 @@ public class Generator {
             return Optional.of(new QRCodeWriter()
                     .encode(text, BarcodeFormat.QR_CODE, 256, 256, hintMap));
         } catch (WriterException e) {
-            Logger.error(e.getMessage(), false);
+            Logger.error(e.getMessage());
             return Optional.empty();
         }
     }
@@ -115,7 +115,7 @@ public class Generator {
         try {
             ImageIO.write(image, "png", file);
         } catch (IOException e) {
-            Logger.error(e.getMessage(), false);
+            Logger.error(e.getMessage());
         }
     }
 }

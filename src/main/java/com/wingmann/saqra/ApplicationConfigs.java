@@ -12,7 +12,7 @@ public class ApplicationConfigs {
         try (var writer = new FileWriter(getConfigPath())) {
             writer.write(path);
         } catch (IOException e) {
-            Logger.error(e.getMessage(), false);
+            Logger.error(e.getMessage());
         }
     }
 
@@ -25,7 +25,7 @@ public class ApplicationConfigs {
             reader.close();
             return path;
         } catch (IOException e) {
-            Logger.error(e.getMessage(), false);
+            Logger.error(e.getMessage());
             return "";
         }
     }
@@ -37,35 +37,35 @@ public class ApplicationConfigs {
         var path = loadConfig();
 
         if (Directory.isInvalidPath(path)) {
-            Logger.error("path is not correct", true);
+            Logger.errorln("path is not correct");
             throw new RuntimeException();
         }
 
         if (Directory.filesNotExists(path)) {
             if (Directory.createDirectories(path)) {
-                Logger.log("directories was created", true);
+                Logger.logln("directories was created");
             }
         }
     }
 
     private static void configure() {
-        Logger.log("configuration", false);
+        Logger.log("configuration");
 
         var scanner = new Scanner(System.in);
         String input;
 
         while (true) {
-            Logger.input();
+            Logger.input("path");
             input = scanner.nextLine();
 
             if (input.isBlank() || Directory.isInvalidPath(input)) {
-                Logger.error("path is invalid", true);
+                Logger.errorln("path is invalid");
                 continue;
             }
             break;
         }
 
         setConfig(input);
-        Logger.log("done.", true);
+        Logger.logln("done.");
     }
 }
