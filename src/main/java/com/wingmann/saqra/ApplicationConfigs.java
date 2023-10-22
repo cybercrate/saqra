@@ -12,7 +12,7 @@ public class ApplicationConfigs {
         try (var writer = new FileWriter(getConfigPath())) {
             writer.write(path);
         } catch (IOException e) {
-            System.err.printf("[error]: %s%n", e.getMessage());
+            Logger.error(e.getMessage(), false);
         }
     }
 
@@ -25,7 +25,7 @@ public class ApplicationConfigs {
             reader.close();
             return path;
         } catch (IOException e) {
-            System.err.printf("[error]: %s%n", e.getMessage());
+            Logger.error(e.getMessage(), false);
             return "";
         }
     }
@@ -37,35 +37,35 @@ public class ApplicationConfigs {
         var path = loadConfig();
 
         if (Directory.isInvalidPath(path)) {
-            System.out.print("[error]: path is not correct\n\n");
+            Logger.error("path is not correct", true);
             throw new RuntimeException();
         }
 
         if (Directory.filesNotExists(path)) {
             if (Directory.createDirectories(path)) {
-                System.out.print("[exec]: directories was created\n\n");
+                Logger.log("directories was created", true);
             }
         }
     }
 
     private static void configure() {
-        System.out.println("[exec]: configuration");
+        Logger.log("configuration", false);
 
         var scanner = new Scanner(System.in);
         String input;
 
         while (true) {
-            System.out.print("[path]: ");
+            Logger.input();
             input = scanner.nextLine();
 
             if (input.isBlank() || Directory.isInvalidPath(input)) {
-                System.err.print("[error]: path is invalid\n\n");
+                Logger.error("path is invalid", true);
                 continue;
             }
             break;
         }
 
         setConfig(input);
-        System.out.print("[exec]: done.\n\n");
+        Logger.log("done.", true);
     }
 }
