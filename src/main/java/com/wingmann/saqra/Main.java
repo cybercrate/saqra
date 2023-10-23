@@ -2,9 +2,9 @@ package com.wingmann.saqra;
 
 import com.wingmann.saqra.config.ApplicationConfig;
 import com.wingmann.saqra.config.Config;
-import com.wingmann.saqra.generator.Generator;
+import com.wingmann.saqra.generator.ImageBuilder;
 import com.wingmann.saqra.generator.ImageCache;
-import com.wingmann.saqra.generator.QrGenerator;
+import com.wingmann.saqra.generator.QrImageBuilder;
 import com.wingmann.saqra.io.ImageWriter;
 import com.wingmann.saqra.io.Writer;
 
@@ -16,13 +16,13 @@ public class Main {
 
         Config config = new ApplicationConfig("./config.txt");
 
-        Generator generator = new QrGenerator(config);
+        ImageBuilder builder = new QrImageBuilder(config);
         Writer writer = new ImageWriter(config);
 
         Optional<ImageCache> result;
 
         while (true) {
-            result = generator.build();
+            result = builder.build();
 
             if (result.isPresent()) {
                 writer.write(result.get());

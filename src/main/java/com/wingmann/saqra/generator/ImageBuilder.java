@@ -3,6 +3,6 @@ package com.wingmann.saqra.generator;
 
 import java.util.Optional;
 
-public interface Generator {
+public interface ImageBuilder {
     Optional<ImageCache> build();
 }

@@ -22,13 +22,13 @@ import java.util.Hashtable;
 import java.util.Map;
 import java.util.Optional;
 
-public class QrGenerator implements Generator {
+public class QrImageBuilder implements ImageBuilder {
     private final Config config;
     private final Logger logger;
     private final FilesManager filesManager;
     private final InputManager inputManager;
 
-    public QrGenerator(Config config) {
+    public QrImageBuilder(Config config) {
         this.config = config;
         this.logger = new ConsoleLogger();
         this.filesManager = new OutputFilesManager();
