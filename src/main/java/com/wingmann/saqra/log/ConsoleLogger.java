@@ -15,7 +15,7 @@ public class ConsoleLogger implements Logger {
         }
     }
 
-    private void message(
+    private void print(
             PrintStream stream,
             PrintType type,
             String message,
@@ -25,21 +25,21 @@ public class ConsoleLogger implements Logger {
 
     @Override
     public void log(String message) {
-        message(System.out, PrintType.LOG, message, false);
+        print(System.out, PrintType.LOG, message, false);
     }
 
     @Override
     public void logLine(String message) {
-        message(System.out, PrintType.LOG, message, true);
+        print(System.out, PrintType.LOG, message, true);
     }
 
     @Override
     public void error(String message) {
-        message(System.err, PrintType.ERROR, message, false);
+        print(System.err, PrintType.ERROR, message, false);
     }
 
     @Override
     public void errorLine(String message) {
-        message(System.err, PrintType.ERROR, message, true);
+        print(System.err, PrintType.ERROR, message, true);
     }
 }
