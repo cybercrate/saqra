@@ -32,13 +32,13 @@ public class QrGenerator implements Generator {
         this.config = config;
         this.logger = new ConsoleLogger();
         this.filesManager = new OutputFilesManager();
-
-        config.setup();
     }
 
     @Override
     public boolean build() {
-        String path = config.loadConfig();
+        config.load();
+        String path = config.get();
+
         File file = filesManager.createFile(path);
         String text = readLine();
 
@@ -124,7 +124,8 @@ public class QrGenerator implements Generator {
     }
 
     private void write(BufferedImage image, File file) {
-        String path = config.loadConfig();
+        config.load();
+        String path = config.get();
 
         if (filesManager.filesNotExists(path)) {
             filesManager.createDirectories(path);
