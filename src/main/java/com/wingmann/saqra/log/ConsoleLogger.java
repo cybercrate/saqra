@@ -14,7 +14,14 @@ public class ConsoleLogger implements Logger {
     }
 
     private void message(PrintType type, String message, boolean emptyLine) {
-        System.out.printf("[%s]: %s%s", type.get(), message, emptyLine ? "\n\n" : "\n");
+        String formattedString = "[%s]: %s%s";
+        String end = emptyLine ? "\n\n" : "\n";
+        
+        if (type == PrintType.LOG) {
+            System.out.printf(formattedString, type.get(), message, end);
+        } else {
+            System.err.printf(formattedString, type.get(), message, end);
+        }
     }
 
     @Override
