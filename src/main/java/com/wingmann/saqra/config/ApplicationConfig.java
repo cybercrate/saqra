@@ -1,9 +1,12 @@
 package com.wingmann.saqra.config;
 
+import com.wingmann.saqra.input.ConsoleInputManager;
+import com.wingmann.saqra.input.InputManager;
 import com.wingmann.saqra.log.ConsoleLogger;
 import com.wingmann.saqra.files.FilesManager;
 import com.wingmann.saqra.log.Logger;
 import com.wingmann.saqra.files.OutputFilesManager;
+import org.checkerframework.checker.units.qual.C;
 
 import java.io.*;
 import java.util.Scanner;
@@ -11,12 +14,14 @@ import java.util.Scanner;
 public class ApplicationConfig implements Config {
     private final Logger logger;
     private final FilesManager filesManager;
+    private final InputManager inputManager;
     private final String path;
     private String data;
 
     public ApplicationConfig(String path) {
         this.logger = new ConsoleLogger();
         this.filesManager = new OutputFilesManager();
+        this.inputManager = new ConsoleInputManager();
         this.path = path;
         this.data = "";
 
@@ -72,13 +77,10 @@ public class ApplicationConfig implements Config {
 
     private void configure() {
         logger.log("configuration");
-
-        Scanner scanner = new Scanner(System.in);
         String input;
 
         while (true) {
-            logger.input("path");
-            input = scanner.nextLine();
+            input = inputManager.read("path").getData();
 
             if (input.isBlank() || filesManager.isInvalidPath(input)) {
                 logger.errorln("path is invalid");

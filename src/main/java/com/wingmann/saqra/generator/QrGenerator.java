@@ -10,6 +10,8 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.wingmann.saqra.config.Config;
 import com.wingmann.saqra.files.FilesManager;
 import com.wingmann.saqra.files.OutputFilesManager;
+import com.wingmann.saqra.input.ConsoleInputManager;
+import com.wingmann.saqra.input.InputManager;
 import com.wingmann.saqra.log.ConsoleLogger;
 import com.wingmann.saqra.log.Logger;
 
@@ -21,17 +23,18 @@ import java.io.IOException;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Scanner;
 
 public class QrGenerator implements Generator {
     private final Config config;
     private final Logger logger;
     private final FilesManager filesManager;
+    private final InputManager inputManager;
 
     public QrGenerator(Config config) {
         this.config = config;
         this.logger = new ConsoleLogger();
         this.filesManager = new OutputFilesManager();
+        this.inputManager = new ConsoleInputManager();
     }
 
     @Override
@@ -40,7 +43,7 @@ public class QrGenerator implements Generator {
         String path = config.get();
 
         File file = filesManager.createFile(path);
-        String text = readLine();
+        String text = input();
 
         if (text.equalsIgnoreCase("/exit")) {
             logger.log("exit");
@@ -53,13 +56,11 @@ public class QrGenerator implements Generator {
         return true;
     }
 
-    private String readLine() {
-        Scanner scanner = new Scanner(System.in);
+    private String input() {
         String input;
 
         while (true) {
-            logger.input("text");
-            input = scanner.nextLine();
+            input = inputManager.read("text").getData();
 
             if (input.isBlank()) {
                 logger.errorln("input is blank");
