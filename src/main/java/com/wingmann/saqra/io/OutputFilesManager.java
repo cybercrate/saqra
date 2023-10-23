@@ -1,4 +1,4 @@
-package com.wingmann.saqra.files;
+package com.wingmann.saqra.io;
 
 import java.io.File;
 import java.nio.file.Files;

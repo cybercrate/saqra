@@ -1,15 +1,13 @@
 package com.wingmann.saqra.config;
 
-import com.wingmann.saqra.input.ConsoleInputManager;
-import com.wingmann.saqra.input.InputManager;
+import com.wingmann.saqra.io.ConsoleInputManager;
+import com.wingmann.saqra.io.InputManager;
 import com.wingmann.saqra.log.ConsoleLogger;
-import com.wingmann.saqra.files.FilesManager;
+import com.wingmann.saqra.io.FilesManager;
 import com.wingmann.saqra.log.Logger;
-import com.wingmann.saqra.files.OutputFilesManager;
-import org.checkerframework.checker.units.qual.C;
+import com.wingmann.saqra.io.OutputFilesManager;
 
 import java.io.*;
-import java.util.Scanner;
 
 public class ApplicationConfig implements Config {
     private final Logger logger;

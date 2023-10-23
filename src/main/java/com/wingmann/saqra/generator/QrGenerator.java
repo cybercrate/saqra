@@ -8,10 +8,10 @@ import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
 import com.wingmann.saqra.config.Config;
-import com.wingmann.saqra.files.FilesManager;
-import com.wingmann.saqra.files.OutputFilesManager;
-import com.wingmann.saqra.input.ConsoleInputManager;
-import com.wingmann.saqra.input.InputManager;
+import com.wingmann.saqra.io.FilesManager;
+import com.wingmann.saqra.io.OutputFilesManager;
+import com.wingmann.saqra.io.ConsoleInputManager;
+import com.wingmann.saqra.io.InputManager;
 import com.wingmann.saqra.log.ConsoleLogger;
 import com.wingmann.saqra.log.Logger;
 

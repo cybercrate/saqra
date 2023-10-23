@@ -1,4 +1,4 @@
-package com.wingmann.saqra.input;
+package com.wingmann.saqra.io;
 
 public interface InputManager {
     String getData();

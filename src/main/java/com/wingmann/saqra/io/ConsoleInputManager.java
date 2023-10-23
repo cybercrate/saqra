@@ -1,4 +1,4 @@
-package com.wingmann.saqra.input;
+package com.wingmann.saqra.io;
 
 import com.wingmann.saqra.log.ConsoleLogger;
 import com.wingmann.saqra.log.Logger;
