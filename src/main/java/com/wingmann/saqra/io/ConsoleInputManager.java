@@ -6,12 +6,10 @@ import com.wingmann.saqra.log.Logger;
 import java.util.Scanner;
 
 public class ConsoleInputManager implements InputManager {
-    private final Logger logger;
     private final Scanner scanner;
     private String data;
 
     public ConsoleInputManager() {
-        this.logger = new ConsoleLogger();
         this.scanner = new Scanner(System.in);
     }
 
@@ -22,9 +20,13 @@ public class ConsoleInputManager implements InputManager {
 
     @Override
     public InputManager read(String message) {
-        logger.input(message);
+        printMessage(message);
         data = scanner.nextLine();
 
         return this;
+    }
+
+    private void printMessage(String message) {
+        System.out.printf("[%s]: ", message);
     }
 }
