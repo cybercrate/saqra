@@ -1,8 +1,5 @@
 package com.wingmann.saqra.io;
 
-import com.wingmann.saqra.log.ConsoleLogger;
-import com.wingmann.saqra.log.Logger;
-
 import java.util.Scanner;
 
 public class ConsoleInputManager implements InputManager {
