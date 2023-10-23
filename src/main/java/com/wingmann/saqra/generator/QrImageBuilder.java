@@ -43,7 +43,7 @@ public class QrImageBuilder implements ImageBuilder {
         String text = input();
         handle(text);
 
-        return generate(text).map(data -> new QrImageCache(data, file));
+        return generateFrom(text).map(data -> new QrImageCache(data, file));
     }
 
     private void handle(String text) {
@@ -67,7 +67,7 @@ public class QrImageBuilder implements ImageBuilder {
         }
     }
 
-    private Optional<BufferedImage> generate(String text) {
+    private Optional<BufferedImage> generateFrom(String text) {
         Map<EncodeHintType, ErrorCorrectionLevel> hintMap = createHintMap();
         Optional<BitMatrix> matrix = createMatrix(text, hintMap);
 
