@@ -15,11 +15,9 @@ import com.wingmann.saqra.io.InputManager;
 import com.wingmann.saqra.log.ConsoleLogger;
 import com.wingmann.saqra.log.Logger;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Optional;
@@ -38,22 +36,21 @@ public class QrGenerator implements Generator {
     }
 
     @Override
-    public boolean build() {
-        config.load();
-        String path = config.get();
-
+    public Optional<QrImageCache> build() {
+        String path = config.load().get();
         File file = filesManager.createFile(path);
-        String text = input();
 
+        String text = input();
+        handle(text);
+
+        return generate(text).map(data -> new QrImageCache(data, file));
+    }
+
+    private void handle(String text) {
         if (text.equalsIgnoreCase("/exit")) {
             logger.log("exit");
-            return false;
+            System.exit(0);
         }
-        Optional<BufferedImage> image = generate(text);
-        image.ifPresent(bufferedImage -> write(bufferedImage, file));
-
-        logger.logln("done.");
-        return true;
     }
 
     private String input() {
@@ -72,7 +69,7 @@ public class QrGenerator implements Generator {
 
     private Optional<BufferedImage> generate(String text) {
         Map<EncodeHintType, ErrorCorrectionLevel> hintMap = createHintMap();
-        Optional<BitMatrix> matrix = generateMatrix(text, hintMap);
+        Optional<BitMatrix> matrix = createMatrix(text, hintMap);
 
         if (matrix.isPresent()) {
             Optional<BufferedImage> image = Optional.of(new BufferedImage(
@@ -93,7 +90,7 @@ public class QrGenerator implements Generator {
         return hintMap;
     }
 
-    private Optional<BitMatrix> generateMatrix(
+    private Optional<BitMatrix> createMatrix(
             String text,
             Map<EncodeHintType, ErrorCorrectionLevel> hintMap) {
         try {
@@ -121,21 +118,6 @@ public class QrGenerator implements Generator {
                     graphics.fillRect(i, j, 1, 1);
                 }
             }
-        }
-    }
-
-    private void write(BufferedImage image, File file) {
-        config.load();
-        String path = config.get();
-
-        if (filesManager.filesNotExists(path)) {
-            filesManager.createDirectories(path);
-        }
-
-        try {
-            ImageIO.write(image, "png", file);
-        } catch (IOException e) {
-            logger.error(e.getMessage());
         }
     }
 }
