@@ -33,7 +33,7 @@ public class ApplicationConfig implements Config {
 
     @Override
     public void set(String path) {
-        try (FileWriter writer = new FileWriter(this.path);) {
+        try (FileWriter writer = new FileWriter(this.path)) {
             writer.write(path);
         } catch (IOException e) {
             logger.error(e.getMessage());
@@ -41,7 +41,7 @@ public class ApplicationConfig implements Config {
     }
 
     @Override
-    public void load() {
+    public Config load() {
         try {
             File config = new File(path);
             BufferedReader reader = new BufferedReader(new FileReader(config));
@@ -52,10 +52,11 @@ public class ApplicationConfig implements Config {
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
+        return this;
     }
 
     @Override
-    public void setup() {
+    public Config setup() {
         if (filesManager.filesNotExists(path)) {
             configure();
         }
@@ -71,6 +72,7 @@ public class ApplicationConfig implements Config {
                 logger.logln("directories was created");
             }
         }
+        return this;
     }
 
     private void configure() {
