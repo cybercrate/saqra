@@ -1,5 +1,7 @@
 package com.wingmann.saqra.log;
 
+import java.io.PrintStream;
+
 public class ConsoleLogger implements Logger {
     private enum PrintType {
         LOG,
@@ -13,24 +15,31 @@ public class ConsoleLogger implements Logger {
         }
     }
 
-    private void message(PrintType type, String message, boolean emptyLine) {
-        String formattedString = "[%s]: %s%s";
-        String end = emptyLine ? "\n\n" : "\n";
-        
-        if (type == PrintType.LOG) {
-            System.out.printf(formattedString, type.get(), message, end);
-        } else {
-            System.err.printf(formattedString, type.get(), message, end);
-        }
+    private void message(
+            PrintStream stream,
+            PrintType type,
+            String message,
+            boolean emptyLine) {
+        stream.printf("[%s]: %s%s", type.get(), message, emptyLine ? "\n\n" : "\n");
     }
 
     @Override
-    public void log(String message, boolean emptyLine) {
-        message(PrintType.LOG, message, emptyLine);
+    public void log(String message) {
+        message(System.out, PrintType.LOG, message, false);
     }
 
     @Override
-    public void error(String message, boolean emptyLine) {
-        message(PrintType.ERROR, message, emptyLine);
+    public void logLine(String message) {
+        message(System.out, PrintType.LOG, message, true);
+    }
+
+    @Override
+    public void error(String message) {
+        message(System.err, PrintType.ERROR, message, false);
+    }
+
+    @Override
+    public void errorLine(String message) {
+        message(System.err, PrintType.ERROR, message, true);
     }
 }

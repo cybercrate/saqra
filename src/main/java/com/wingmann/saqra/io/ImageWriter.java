@@ -31,7 +31,7 @@ public class ImageWriter implements Writer {
         try {
             ImageIO.write(image.getData(), "png", image.getTarget());
         } catch (IOException e) {
-            logger.error(e.getMessage(), false);
+            logger.error(e.getMessage());
         }
     }
 }

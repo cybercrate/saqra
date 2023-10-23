@@ -48,7 +48,7 @@ public class QrImageBuilder implements ImageBuilder {
 
     private void handle(String text) {
         if (text.equalsIgnoreCase("/exit")) {
-            logger.log("exit", false);
+            logger.log("exit");
             System.exit(0);
         }
     }
@@ -60,7 +60,7 @@ public class QrImageBuilder implements ImageBuilder {
             input = inputManager.read("text").getData();
 
             if (input.isBlank()) {
-                logger.error("input is blank", true);
+                logger.errorLine("input is blank");
                 continue;
             }
             return input;
@@ -97,7 +97,7 @@ public class QrImageBuilder implements ImageBuilder {
             return Optional.of(new QRCodeWriter()
                     .encode(text, BarcodeFormat.QR_CODE, 256, 256, hintMap));
         } catch (WriterException e) {
-            logger.error(e.getMessage(), false);
+            logger.error(e.getMessage());
             return Optional.empty();
         }
     }
