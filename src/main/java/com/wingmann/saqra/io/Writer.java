@@ -1,7 +1,7 @@
 package com.wingmann.saqra.io;
 
-import com.wingmann.saqra.generator.QrImageCache;
+import com.wingmann.saqra.generator.ImageCache;
 
 public interface Writer {
-    void write(QrImageCache image);
+    void write(ImageCache image);
 }

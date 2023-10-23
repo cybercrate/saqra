@@ -13,27 +13,17 @@ public class ConsoleLogger implements Logger {
         }
     }
 
-    private void message(PrintType type, String message, boolean line) {
-        System.out.printf("[%s]: %s%s", type.get(), message, line ? "\n\n" : "\n");
+    private void message(PrintType type, String message, boolean emptyLine) {
+        System.out.printf("[%s]: %s%s", type.get(), message, emptyLine ? "\n\n" : "\n");
     }
 
     @Override
-    public void log(String message) {
-        message(PrintType.LOG, message, false);
+    public void log(String message, boolean emptyLine) {
+        message(PrintType.LOG, message, emptyLine);
     }
 
     @Override
-    public void logln(String message) {
-        message(PrintType.LOG, message, true);
-    }
-
-    @Override
-    public void error(String message) {
-        message(PrintType.ERROR, message, false);
-    }
-
-    @Override
-    public void errorln(String message) {
-        message(PrintType.ERROR, message, true);
+    public void error(String message, boolean emptyLine) {
+        message(PrintType.ERROR, message, emptyLine);
     }
 }

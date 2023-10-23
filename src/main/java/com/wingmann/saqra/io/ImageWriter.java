@@ -1,7 +1,7 @@
 package com.wingmann.saqra.io;
 
 import com.wingmann.saqra.config.Config;
-import com.wingmann.saqra.generator.QrImageCache;
+import com.wingmann.saqra.generator.ImageCache;
 import com.wingmann.saqra.log.ConsoleLogger;
 import com.wingmann.saqra.log.Logger;
 
@@ -20,7 +20,7 @@ public class ImageWriter implements Writer {
     }
 
     @Override
-    public void write(QrImageCache image) {
+    public void write(ImageCache image) {
         config.load();
         String path = config.get();
 
@@ -29,10 +29,9 @@ public class ImageWriter implements Writer {
         }
 
         try {
-            ImageIO.write(image.data, "png", image.file);
-            ImageIO.write(image.data, "png", image.file);
+            ImageIO.write(image.getData(), "png", image.getTarget());
         } catch (IOException e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(), false);
         }
     }
 }

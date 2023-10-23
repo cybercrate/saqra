@@ -36,7 +36,7 @@ public class QrGenerator implements Generator {
     }
 
     @Override
-    public Optional<QrImageCache> build() {
+    public Optional<ImageCache> build() {
         String path = config.load().get();
         File file = filesManager.createFile(path);
 
@@ -48,7 +48,7 @@ public class QrGenerator implements Generator {
 
     private void handle(String text) {
         if (text.equalsIgnoreCase("/exit")) {
-            logger.log("exit");
+            logger.log("exit", false);
             System.exit(0);
         }
     }
@@ -60,7 +60,7 @@ public class QrGenerator implements Generator {
             input = inputManager.read("text").getData();
 
             if (input.isBlank()) {
-                logger.errorln("input is blank");
+                logger.error("input is blank", true);
                 continue;
             }
             return input;
@@ -97,7 +97,7 @@ public class QrGenerator implements Generator {
             return Optional.of(new QRCodeWriter()
                     .encode(text, BarcodeFormat.QR_CODE, 256, 256, hintMap));
         } catch (WriterException e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(), false);
             return Optional.empty();
         }
     }

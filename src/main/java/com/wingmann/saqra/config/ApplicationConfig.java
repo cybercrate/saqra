@@ -36,7 +36,7 @@ public class ApplicationConfig implements Config {
         try (FileWriter writer = new FileWriter(this.path)) {
             writer.write(path);
         } catch (IOException e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(), false);
         }
     }
 
@@ -50,7 +50,7 @@ public class ApplicationConfig implements Config {
             reader.close();
             data = path;
         } catch (IOException e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(), false);
         }
         return this;
     }
@@ -63,33 +63,33 @@ public class ApplicationConfig implements Config {
         load();
 
         if (filesManager.isInvalidPath(data)) {
-            logger.errorln("path is not correct");
+            logger.error("path is not correct", true);
             throw new RuntimeException();
         }
 
         if (filesManager.filesNotExists(data)) {
             if (filesManager.createDirectories(data)) {
-                logger.logln("directories was created");
+                logger.log("directories was created", true);
             }
         }
         return this;
     }
 
     private void configure() {
-        logger.log("configuration");
+        logger.log("configuration", false);
         String input;
 
         while (true) {
             input = inputManager.read("path").getData();
 
             if (input.isBlank() || filesManager.isInvalidPath(input)) {
-                logger.errorln("path is invalid");
+                logger.error("path is invalid", true);
                 continue;
             }
             break;
         }
 
         set(input);
-        logger.logln("done.");
+        logger.log("done.", true);
     }
 }

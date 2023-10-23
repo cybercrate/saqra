@@ -4,5 +4,5 @@ package com.wingmann.saqra.generator;
 import java.util.Optional;
 
 public interface Generator {
-    Optional<QrImageCache> build();
+    Optional<ImageCache> build();
 }
