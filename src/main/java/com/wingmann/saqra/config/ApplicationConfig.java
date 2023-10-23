@@ -9,19 +9,28 @@ import java.io.*;
 import java.util.Scanner;
 
 public class ApplicationConfig implements Config {
-    private final String configPath;
     private final Logger logger;
     private final FilesManager filesManager;
+    private final String path;
+    private String data;
 
-    public ApplicationConfig(String configPath) {
-        this.configPath = configPath;
+    public ApplicationConfig(String path) {
         this.logger = new ConsoleLogger();
         this.filesManager = new OutputFilesManager();
+        this.path = path;
+        this.data = "";
+
+        setup();
     }
 
     @Override
-    public void setConfig(String path) {
-        try (FileWriter writer = new FileWriter(configPath)) {
+    public String get() {
+        return data;
+    }
+
+    @Override
+    public void set(String path) {
+        try (FileWriter writer = new FileWriter(this.path);) {
             writer.write(path);
         } catch (IOException e) {
             logger.error(e.getMessage());
@@ -29,34 +38,33 @@ public class ApplicationConfig implements Config {
     }
 
     @Override
-    public String loadConfig() {
+    public void load() {
         try {
-            File config = new File(configPath);
+            File config = new File(path);
             BufferedReader reader = new BufferedReader(new FileReader(config));
             String path = reader.readLine();
 
             reader.close();
-            return path;
+            data = path;
         } catch (IOException e) {
             logger.error(e.getMessage());
-            return "";
         }
     }
 
     @Override
     public void setup() {
-        if (filesManager.filesNotExists(configPath)) {
+        if (filesManager.filesNotExists(path)) {
             configure();
         }
-        String path = loadConfig();
+        load();
 
-        if (filesManager.isInvalidPath(path)) {
+        if (filesManager.isInvalidPath(data)) {
             logger.errorln("path is not correct");
             throw new RuntimeException();
         }
 
-        if (filesManager.filesNotExists(path)) {
-            if (filesManager.createDirectories(path)) {
+        if (filesManager.filesNotExists(data)) {
+            if (filesManager.createDirectories(data)) {
                 logger.logln("directories was created");
             }
         }
@@ -79,7 +87,7 @@ public class ApplicationConfig implements Config {
             break;
         }
 
-        setConfig(input);
+        set(input);
         logger.logln("done.");
     }
 }
