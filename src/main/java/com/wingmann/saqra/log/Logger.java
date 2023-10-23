@@ -5,5 +5,4 @@ public interface Logger {
     void logln(String message);
     void error(String message);
     void errorln(String message);
-    void input(String message);
 }

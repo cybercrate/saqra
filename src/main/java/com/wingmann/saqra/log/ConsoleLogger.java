@@ -17,10 +17,6 @@ public class ConsoleLogger implements Logger {
         System.out.printf("[%s]: %s%s", type.get(), message, line ? "\n\n" : "\n");
     }
 
-    private void inputMessage(String message) {
-        System.out.printf("[%s]: ", message);
-    }
-
     @Override
     public void log(String message) {
         message(PrintType.LOG, message, false);
@@ -39,10 +35,5 @@ public class ConsoleLogger implements Logger {
     @Override
     public void errorln(String message) {
         message(PrintType.ERROR, message, true);
-    }
-
-    @Override
-    public void input(String message) {
-        inputMessage(message);
     }
 }
