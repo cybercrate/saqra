@@ -1,8 +1,10 @@
 plugins {
     id 'java'
     id 'application'
-    id 'com.github.johnrengelman.shadow' version '7.0.0'
 }
+
+group = 'com.wingmann'
+version = '1.0.0'
 
 java {
     toolchain {
@@ -23,14 +25,15 @@ dependencies {
     implementation 'com.google.zxing:core:3.5.2'
 }
 
-shadowJar {
-    archiveBaseName.set('saqra')
-    archiveVersion.set('1.0.0')
-    archiveClassifier.set('')
-
+tasks.jar {
     manifest {
         attributes 'Main-Class': application.mainClass
     }
-}
 
-tasks.build.dependsOn tasks.shadowJar
+    def dependencies = configurations
+            .runtimeClasspath
+            .collect { zipTree(it) }
+
+    from(dependencies)
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
