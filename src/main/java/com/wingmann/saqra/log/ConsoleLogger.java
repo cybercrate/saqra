@@ -7,7 +7,8 @@ public class ConsoleLogger implements Logger {
         LOG,
         ERROR;
 
-        public String get() {
+        @Override
+        public String toString() {
             if (this == PrintType.LOG) {
                 return "exec";
             }
@@ -20,7 +21,7 @@ public class ConsoleLogger implements Logger {
             PrintType type,
             String message,
             boolean emptyLine) {
-        stream.printf("[%s]: %s%s", type.get(), message, emptyLine ? "\n\n" : "\n");
+        stream.printf("[%s]: %s%s", type, message, emptyLine ? "\n\n" : "\n");
     }
 
     @Override
