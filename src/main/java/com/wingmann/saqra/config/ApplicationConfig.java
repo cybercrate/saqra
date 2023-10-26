@@ -88,7 +88,6 @@ public class ApplicationConfig implements Config {
             }
             break;
         }
-
         set(input);
         logger.logLine("done.");
     }

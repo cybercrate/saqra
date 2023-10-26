@@ -63,6 +63,7 @@ public class QrImageBuilder implements ImageBuilder {
                 logger.errorLine("input is blank");
                 continue;
             }
+            logger.logLine("done.");
             return input;
         }
     }
