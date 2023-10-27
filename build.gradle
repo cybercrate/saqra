@@ -30,10 +30,6 @@ jar {
         attributes 'Main-Class': application.mainClass
     }
 
-    def dependencies = configurations
-            .runtimeClasspath
-            .collect { zipTree(it) }
-
-    from(dependencies)
+    from(configurations.runtimeClasspath.collect { zipTree(it) })
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
