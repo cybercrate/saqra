@@ -4,15 +4,17 @@ import java.io.PrintStream;
 
 public class ConsoleLogger implements Logger {
     private enum PrintType {
-        LOG,
-        ERROR;
-
-        @Override
-        public String toString() {
-            if (this == PrintType.LOG) {
+        LOG {
+            @Override
+            public String toString() {
                 return "exec";
             }
-            return "error";
+        },
+        ERROR {
+            @Override
+            public String toString() {
+                return "error";
+            }
         }
     }
 
